@@ -42,63 +42,54 @@ class Game:  # Define a new class called Game
         except ValueError:  # Handle non-integer inputs
             print("Please enter a valid number or 'exit' to quit.")  # Notify the player of invalid input
 
-    def interact_with_prostitute(self, prostitute):  # Method for interaction with a prostitute
-        print(f"\n{prostitute.name}: {prostitute.offer_services()}")  # Display services offered
-        action = input("Choose an option (1, 2, or 3) or type 'exit' to quit: ")  # Get player's action choice
+    def interact_with_character(self, character):  # Method for interaction with any character
+        if isinstance(character, Prostitute):  # Check if the character is a prostitute
+            print(f"\n{character.name}: {character.offer_services()}")  # Display services offered
+            action = input("Choose an option (1, 2, or 3) or type 'exit' to quit: ")  # Get player's action choice
 
-        if action.lower() == "exit":  # Check if the player wants to exit
-            print("Thanks for playing! Goodbye!")  # Farewell message
-            self.game_over = True  # Set the game over flag to True
-            return
+            if action.lower() == "exit":  # Check if the player wants to exit
+                print("Thanks for playing! Goodbye!")  # Farewell message
+                self.game_over = True  # Set the game over flag to True
+                return
 
-        if action == "1":  # If the player chooses to have sex
-            if self.player.money >= 10:  # Check if the player has enough money
-                self.player.money -= 10  # Deduct money from the player
-                print(f"You have sex with {prostitute.name}. You paid $10.")  # Notify the player
-            else:
-                print("You don't have enough money for this service.")  # Notify if not enough money
+            if action == "1":  # If the player chooses to have sex
+                if self.player.money >= 10:  # Check if the player has enough money
+                    self.player.money -= 10  # Deduct money from the player
+                    print(f"You have sex with {character.name}. You paid $10.")  # Notify the player
+                else:
+                    print("You don't have enough money for this service.")  # Notify if not enough money
 
-        elif action == "2":  # If the player chooses to rob
-            success = random.random() < 0.8  # 80% chance of success
-            if success:
-                loot = prostitute.money  # Loot the prostitute's money
-                self.player.money += loot  # Add the loot to the player's total money
-                prostitute.money = 0  # Set the prostitute's money to 0
-                print(f"You successfully robbed {prostitute.name} and got ${loot}!")  # Notify the player
-            else:
-                print("You failed to rob the prostitute!")  # Notify if the robbery failed
-
-        elif action == "3":  # If the player chooses to fight
-            success = random.random() < 0.9  # 90% chance of success
-            if success:
-                damage = random.randint(5, 15)  # Random damage the player can deal
-                prostitute.take_damage(damage)  # Inflict damage on the prostitute
-                print(f"You fought {prostitute.name} and dealt {damage} damage!")  # Notify the player
-                if not prostitute.is_alive():  # Check if the prostitute is defeated
-                    loot = prostitute.money  # Loot money from the prostitute
+            elif action == "2":  # If the player chooses to rob
+                success = random.random() < 0.8  # 80% chance of success
+                if success:
+                    loot = character.money  # Loot the prostitute's money
                     self.player.money += loot  # Add the loot to the player's total money
-                    prostitute.money = 0  # Set the prostitute's money to 0
-                    print(f"You defeated {prostitute.name} and looted ${loot}!")  # Notify the player of the loot
-            else:
-                print("You failed to fight the prostitute!")  # Notify if the fight failed
+                    character.money = 0  # Set the prostitute's money to 0
+                    print(f"You successfully robbed {character.name} and got ${loot}!")  # Notify the player
+                else:
+                    print("You failed to rob the prostitute!")  # Notify if the robbery failed
 
-    def encounter(self):  # Define a method for encounters that happen during travel
-        print("\nYou encounter something!")  # Inform the player that an encounter occurs
-        encounter_type = random.choice(["npc", "mugger", "prostitute"])  # Randomly choose between an NPC, mugger, or prostitute
+            elif action == "3":  # If the player chooses to fight
+                success = random.random() < 0.9  # 90% chance of success
+                if success:
+                    damage = random.randint(5, 15)  # Random damage the player can deal
+                    character.take_damage(damage)  # Inflict damage on the prostitute
+                    print(f"You fought {character.name} and dealt {damage} damage!")  # Notify the player
+                    if not character.is_alive():  # Check if the prostitute is defeated
+                        loot = character.money  # Loot money from the prostitute
+                        self.player.money += loot  # Add the loot to the player's total money
+                        character.money = 0  # Set the prostitute's money to 0
+                        print(f"You defeated {character.name} and looted ${loot}!")  # Notify the player of the loot
+                else:
+                    print("You failed to fight the prostitute!")  # Notify if the fight failed
 
-        if encounter_type == "npc":  # If the encounter is with an NPC
-            npc = NPC("Villager", health=50, money=10)  # Create a new NPC
-            self.interact_with_npc(npc)  # Allow the player to interact with the NPC
-            self.player.money += npc.money  # Add NPC's money to the player's total money
-            print(f"You received ${npc.money} from the NPC.")  # Notify the player of the money received
+        elif isinstance(character, NPC):  # Check if the character is an NPC
+            print(f"\n{character.name}: {character.interact()}")  # Display NPC's dialogue
+            # Additional interactions can be added here if desired.
 
-        elif encounter_type == "mugger":  # If the encounter is with a mugger
-            mugger = Mugger("Thug")  # Create a new mugger
-            print(f"You encounter a mugger: {mugger.name}!")  # Notify the player about the mugger encounter
-            print(f"Health: {mugger.health} | Money: ${mugger.money}")  # Print the mugger's status
-
-            # Simulate a fight with the mugger
-            while self.player.is_alive() and mugger.is_alive():
+        elif isinstance(character, Mugger):  # Check if the character is a Mugger
+            print(f"You encounter a mugger: {character.name}!")  # Notify the player about the mugger encounter
+            while self.player.is_alive() and character.is_alive():
                 action = input("Do you want to (1) Fight or (2) Flee? (Type 'exit' to quit) ")  # Ask the player for action
                 if action.lower() == "exit":  # Check if the player wants to exit
                     print("Thanks for playing! Goodbye!")  # Farewell message
@@ -107,10 +98,10 @@ class Game:  # Define a new class called Game
 
                 if action == "1":  # If the player chooses to fight
                     damage = random.randint(5, 20)  # Random damage the player can deal
-                    mugger.take_damage(damage)  # Inflict damage on the mugger
+                    character.take_damage(damage)  # Inflict damage on the mugger
                     print(f"You dealt {damage} damage to the mugger!")  # Notify the player
-                    if not mugger.is_alive():  # Check if the mugger is defeated
-                        loot = mugger.loot()  # Loot money from the mugger
+                    if not character.is_alive():  # Check if the mugger is defeated
+                        loot = character.loot()  # Loot money from the mugger
                         self.player.money += loot  # Add the loot to the player's total money
                         print(f"You defeated the mugger and looted ${loot}!")  # Notify the player of the loot
                         break  # Exit the loop if the mugger is defeated
@@ -128,11 +119,24 @@ class Game:  # Define a new class called Game
                 self.game_over = True  # Set the game over flag to True
                 print("You were defeated by the mugger!")  # Notify the player of their defeat
 
-        elif encounter_type == "prostitute":  # If the encounter is with a prostitute
-            prostitute = Prostitute("Lola")  # Create a new prostitute
-            self.interact_with_prostitute(prostitute)  # Allow the player to interact with the prostitute
+    def encounter(self):  # Define a method for encounters that happen during travel
+        print("\nYou encounter something!")  # Inform the player that an encounter occurs
+        encounter_type = random.choice(["npc", "mugger", "prostitute"])  # Randomly choose between an NPC, mugger, or prostitute
 
-    def play(self):  # Define the main game loop
+        if encounter_type == "npc":  # If the encounter is with an NPC
+            npc = NPC("Villager", health=50, money=10) 
+            self.interact_with_character(npc)
+
+        elif encounter_type == "mugger":  # If the encounter is with a mugger
+            mugger = Mugger("Thug") 
+            self.interact_with_character(mugger)
+
+        elif encounter_type == "prostitute":  # If the encounter is with a prostitute
+            prostitute = Prostitute("Lola") 
+            self.interact_with_character(prostitute)
+
+    # Define the main game loop
+    def play(self):
         print("Welcome to the Text-Based GTA Game!")  # Print a welcome message
         while not self.game_over:  # Continue the loop until the game is over
             self.display_status()  # Display the player's current status

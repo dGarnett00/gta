@@ -73,6 +73,10 @@ class Prostitute(Character):  # Define a Prostitute class that inherits from Cha
     def offer_services(self):  # Method for the prostitute's services
         return "What would you like to do? (1) Sex, (2) Rob, (3) Fight"
 
+
+
+
+
 '''
 # Example usage (can be removed or commented out in production):
 if __name__ == "__main__":
@@ -84,4 +88,6 @@ if __name__ == "__main__":
     print(player)  # Print the player's status
     print(npc)  # Print the NPC's status
     print(mugger)  # Print the mugger's status
-    print(prostitute)  # Print the prostitute's status   '''
+    print(prostitute)  # Print the prostitute's status
+
+    '''

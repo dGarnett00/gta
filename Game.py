@@ -1,25 +1,28 @@
 import random  # Import the random module to use for generating random events
-from characters import Player, NPC, Mugger, Prostitute  # Import the Player, NPC, Mugger, and Prostitute classes from characters.py
+from characters import Player, NPC, Mugger, Prostitute  # Import character classes
+from locations import get_locations  # Import the function to get locations
 
 class Game:  # Define a new class called Game
     def __init__(self):  # Define the initializer method for the Game class
         player_name = input("Enter your character's name: ")  # Prompt for the player's name
         self.player = Player(player_name)  # Create a player character with the provided name
-        self.location = "City Center"  # Set the initial location to "City Center"
+        self.location = None  # Initialize the current location
         self.game_over = False  # Set the game over flag to False
+        
+        # Load the available locations
+        self.locations = get_locations()  # Get the list of locations
 
     def display_status(self):  # Define a method to display the player's status
         print("\n--- Status ---")  # Print a header for the status display
-        print(f"Location: {self.location}")  # Print the current location
+        print(f"Current Location: {self.location.name if self.location else 'Escaped from prison'}")  # Print the current location
         print(f"Health: {self.player.health}")  # Print the player's current health
         print(f"Money: ${self.player.money}")  # Print the player's current amount of money
 
     def travel(self):  # Define a method for the player to travel to different locations
         print("\nWhere would you like to travel? (Type 'exit' to quit)")  # Prompt the player for travel options
-        destinations = ["City Center", "Park", "Suburbs", "Downtown", "Beach"]  # List possible destinations
 
-        for idx, dest in enumerate(destinations):  # Loop through each destination with its index
-            print(f"{idx + 1}: {dest}")  # Print the index and name of each destination
+        for idx, loc in enumerate(self.locations):  # Loop through each location with its index
+            print(f"{idx + 1}: {loc.name}")  # Print the index and name of each location
 
         choice = input("> ")  # Get the player's choice
         if choice.lower() == "exit":  # Check if the player wants to exit
@@ -29,9 +32,10 @@ class Game:  # Define a new class called Game
 
         try:
             choice = int(choice) - 1  # Convert the player's choice to an index
-            if 0 <= choice < len(destinations):  # Check if the player's choice is valid
-                self.location = destinations[choice]  # Update the location based on the player's choice
-                print(f"You travel to {self.location}.")  # Inform the player of their new location
+            if 0 <= choice < len(self.locations):  # Check if the player's choice is valid
+                self.location = self.locations[choice]  # Update the location based on the player's choice
+                print(f"You travel to {self.location.name}.")  # Inform the player of their new location
+                print(self.location.description)  # Print the description of the location
                 self.encounter()  # Trigger an encounter after traveling
             else:  # If the choice is invalid
                 print("Invalid choice!")  # Inform the player of the invalid choice
@@ -113,7 +117,7 @@ class Game:  # Define a new class called Game
                     # Mugger attacks back
                     mugger_damage = random.randint(5, 15)  # Random damage the mugger can deal
                     self.player.take_damage(mugger_damage)  # Inflict damage on the player
-                    print(f"The mugger dealt {mugger_damage} damage to you!")  # Notify the player
+                    print(f"The mugger dealt {mugger_damage} damage to you!")  # Notify the player of the damage taken
                 elif action == "2":  # If the player chooses to flee
                     print("You fled from the mugger!")  # Notify the player
                     break  # Exit the loop if the player flees

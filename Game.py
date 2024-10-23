@@ -3,7 +3,8 @@ from characters import Player, NPC, Mugger, Prostitute  # Import the Player, NPC
 
 class Game:  # Define a new class called Game
     def __init__(self):  # Define the initializer method for the Game class
-        self.player = Player("Hero")  # Create a player character named "Hero"
+        player_name = input("Enter your character's name: ")  # Prompt for the player's name
+        self.player = Player(player_name)  # Create a player character with the provided name
         self.location = "City Center"  # Set the initial location to "City Center"
         self.game_over = False  # Set the game over flag to False
 
@@ -14,23 +15,37 @@ class Game:  # Define a new class called Game
         print(f"Money: ${self.player.money}")  # Print the player's current amount of money
 
     def travel(self):  # Define a method for the player to travel to different locations
-        print("\nWhere would you like to travel?")  # Prompt the player for travel options
+        print("\nWhere would you like to travel? (Type 'exit' to quit)")  # Prompt the player for travel options
         destinations = ["City Center", "Park", "Suburbs", "Downtown", "Beach"]  # List possible destinations
 
         for idx, dest in enumerate(destinations):  # Loop through each destination with its index
             print(f"{idx + 1}: {dest}")  # Print the index and name of each destination
 
-        choice = int(input("> ")) - 1  # Get the player's choice and convert it to an index
-        if 0 <= choice < len(destinations):  # Check if the player's choice is valid
-            self.location = destinations[choice]  # Update the location based on the player's choice
-            print(f"You travel to {self.location}.")  # Inform the player of their new location
-            self.encounter()  # Trigger an encounter after traveling
-        else:  # If the choice is invalid
-            print("Invalid choice!")  # Inform the player of the invalid choice
+        choice = input("> ")  # Get the player's choice
+        if choice.lower() == "exit":  # Check if the player wants to exit
+            print("Thanks for playing! Goodbye!")  # Farewell message
+            self.game_over = True  # Set the game over flag to True
+            return
+
+        try:
+            choice = int(choice) - 1  # Convert the player's choice to an index
+            if 0 <= choice < len(destinations):  # Check if the player's choice is valid
+                self.location = destinations[choice]  # Update the location based on the player's choice
+                print(f"You travel to {self.location}.")  # Inform the player of their new location
+                self.encounter()  # Trigger an encounter after traveling
+            else:  # If the choice is invalid
+                print("Invalid choice!")  # Inform the player of the invalid choice
+        except ValueError:  # Handle non-integer inputs
+            print("Please enter a valid number or 'exit' to quit.")  # Notify the player of invalid input
 
     def interact_with_prostitute(self, prostitute):  # Method for interaction with a prostitute
         print(f"\n{prostitute.name}: {prostitute.offer_services()}")  # Display services offered
-        action = input("Choose an option (1, 2, or 3): ")  # Get player's action choice
+        action = input("Choose an option (1, 2, or 3) or type 'exit' to quit: ")  # Get player's action choice
+
+        if action.lower() == "exit":  # Check if the player wants to exit
+            print("Thanks for playing! Goodbye!")  # Farewell message
+            self.game_over = True  # Set the game over flag to True
+            return
 
         if action == "1":  # If the player chooses to have sex
             if self.player.money >= 10:  # Check if the player has enough money
@@ -80,7 +95,12 @@ class Game:  # Define a new class called Game
 
             # Simulate a fight with the mugger
             while self.player.is_alive() and mugger.is_alive():
-                action = input("Do you want to (1) Fight or (2) Flee? ")  # Ask the player for action
+                action = input("Do you want to (1) Fight or (2) Flee? (Type 'exit' to quit) ")  # Ask the player for action
+                if action.lower() == "exit":  # Check if the player wants to exit
+                    print("Thanks for playing! Goodbye!")  # Farewell message
+                    self.game_over = True  # Set the game over flag to True
+                    return
+
                 if action == "1":  # If the player chooses to fight
                     damage = random.randint(5, 20)  # Random damage the player can deal
                     mugger.take_damage(damage)  # Inflict damage on the mugger

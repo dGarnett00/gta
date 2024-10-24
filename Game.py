@@ -17,6 +17,7 @@ class Game:  # Define a new class called Game
         print(f"Current Location: {self.location.name if self.location else 'Escaped from prison'}")  # Print the current location
         print(f"Health: {self.player.health}")  # Print the player's current health
         print(f"Money: ${self.player.money}")  # Print the player's current amount of money
+        print(f"Muscle: {self.player.muscle}")  # Print the player's current muscle points
 
     def travel(self):  # Define a method for the player to travel to different locations
         print("\nWhere would you like to travel? (Type 'exit' to quit)")  # Prompt the player for travel options

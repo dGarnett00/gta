@@ -163,7 +163,7 @@ class Game:  # Define a new class called Game
             self.interact_with_character(mugger)
 
         elif encounter_type == "prostitute":  # If the encounter is with a prostitute
-            prostitute = Prostitute("Lola") 
+            prostitute = Prostitute("prostitute") 
             self.interact_with_character(prostitute)
 
     # Define the main game loop

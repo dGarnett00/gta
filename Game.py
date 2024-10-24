@@ -1,3 +1,4 @@
+# game.py
 import random  # Import the random module, enabling the generation of random numbers used for game events
 from characters import Player, NPC, Mugger, Prostitute  # Import various character classes for player and NPC interactions
 from locations import get_locations  # Import a function to retrieve available locations in the game

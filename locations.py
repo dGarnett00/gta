@@ -1,7 +1,7 @@
 # locations.py
 
 class Location:  # Define a class named Location
-    def __init__(self, name, description, options):  # Initialize with name, description, and options
+    def __init__(self, name, description, options):  # Initialize the Location class with a name, description, and options
         self.name = name  # Set the name of the location
         self.description = description  # Set the description of the location
         self.options = options  # Set the options available at this location

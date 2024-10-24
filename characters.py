@@ -22,21 +22,18 @@ class Character:  # Define a base class for characters in the game
 class Player(Character):  # Define a Player class that inherits from Character
     def __init__(self, name):  # Initialize the player with a name
         super().__init__(name, health=100, money=50)  # Call the parent class's initializer with default health and money
+        self.muscle = 0  # Initialize muscle points
 
-    def converse(self, npc):  # Method for the player to converse with an NPC
-        dialogues = [  # List of possible dialogues
-            "How are you today?",
-            "Have you heard any news?",
-            "What's your favorite place in town?",
-            "Do you have any tips for me?",
-            "Goodbye!"
-        ]
-        response = random.choice(dialogues)  # Randomly choose a dialogue response
-        print(f"{self.name}: {response}")  # Print the player's dialogue
-        if response == "Goodbye!":  # If the player says goodbye
-            print(f"{npc.name}: 'Take care!'")  # NPC responds with a farewell
-        else:
-            print(f"{npc.name}: 'That's interesting!'")  # NPC responds to other dialogues
+    def gain_muscle(self, amount):  # Method for the player to gain muscle
+        self.muscle += amount  # Increase muscle points
+        print(f"{self.name} gained {amount} muscle points!")
+
+    def lose_muscle(self, amount):  # Method for the player to lose muscle
+        self.muscle = max(0, self.muscle - amount)  # Avoid negative muscle points
+        print(f"{self.name} lost {amount} muscle points!")
+
+    def __str__(self):  # String representation including muscle points
+        return f"{self.name} | Health: {self.health} | Money: ${self.money} | Muscle: {self.muscle}"  # Return formatted string with muscle
 
 
 class NPC(Character):  # Define an NPC (Non-Player Character) class that inherits from Character
@@ -72,10 +69,16 @@ class Prostitute(Character):  # Define a Prostitute class that inherits from Cha
 
     def offer_services(self):  # Method for the prostitute's services
         return "What would you like to do? (1) Sex, (2) Rob, (3) Fight"
+    
 
 
 
 
+
+
+
+
+    
 
 '''
 # Example usage (can be removed or commented out in production):
@@ -89,5 +92,4 @@ if __name__ == "__main__":
     print(npc)  # Print the NPC's status
     print(mugger)  # Print the mugger's status
     print(prostitute)  # Print the prostitute's status
-
     '''

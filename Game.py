@@ -1,6 +1,6 @@
 # game.py
 import random  # Import the random module for generating random numbers used in game events
-from characters import Player, NPC, Mugger, Prostitute  # Import character classes for player and NPC interactions
+from characters import Player, NPC, Mugger, Prostitute, Enemy  # Import character classes for player and NPC interactions
 from locations import get_locations  # Import a function to retrieve available locations in the game
 
 class Game:  # Define the Game class to encapsulate the game's logic and functionality
@@ -13,7 +13,7 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
 
     def display_status(self):  # Define a method to display the current status of the player
         print("\n--- Status ---")  # Print a header for the status display
-        # Print the current location name or a default message indicating escaped state
+        # Print the current location name or a default message indicating an escaped state
         print(f"Current Location: {self.location.name if self.location else 'Escaped from prison'}")
         print(f"Name: {self.player.name}")  # Display the player's character name
         print(f"Health: {self.player.health}")  # Display the player's current health points
@@ -65,9 +65,8 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
 
             choice = input("> ")  # Get the player's choice of action in the gym
             if choice == "1":  # If the player chooses to work out
-                print("You decide to work out! Your strength increases.")  # Notify the player of their workout decision
-                self.player.muscle += 1  # Increase the player's muscle points by 1
-                print(f"Muscle points increased to: {self.player.muscle}")  # Confirm the new muscle point total for the player
+                print("You decide to work out! Your muscle increases.")  # Notify the player of their workout decision
+                self.player.gain_muscle(1)  # Increase the player's muscle points by 1 using the newly defined method
             elif choice == "2":  # If the player chooses to leave the gym
                 print("You chose to leave the gym.")  # Notify the player
                 break  # Exit the loop, returning to the travel options
@@ -76,8 +75,8 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
 
     def interact_with_character(self, character):  # Define a method for player interaction with characters
         if isinstance(character, Prostitute):  # Check if the character is a Prostitute
-            # Existing Prostitute interaction logic would be inserted here
-            pass  # Placeholder for future implementation of prostitute interactions
+            print(f"{character.name}: {character.offer_services()}")  # Display the prostitute's offer
+            return  # Placeholder for future implementation of prostitute interactions
 
         elif isinstance(character, NPC):  # Check if the character is a non-playable character (NPC)
             print(f"\n{character.name}: {character.interact()}")  # Display the NPC's dialogue
@@ -90,12 +89,17 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
             print(f"You encounter a mugger: {character.name}!")  # Notify the player of the mugger encounter
             self.fight(character)  # Call the fight method to handle the fight with the mugger
 
+        elif isinstance(character, Enemy):  # Check if the character is an Enemy
+            print(f"You encounter an enemy: {character.name}!")  # Notify the player of the enemy encounter
+            self.fight(character)  # Call the fight method to handle the fight with the enemy
+      
     def fight(self, enemy):  # Define a method to handle the fight against an enemy
         while self.player.is_alive() and enemy.is_alive():  # Loop while both the player and the enemy are alive
-            print(f"\nYou encounter {enemy.name}!")  # Notify the player about the encounter with the enemy
+            print(f"\nYou encounter {enemy.name}! Health: {enemy.health}, Muscle: {self.player.muscle}")  # Notify the player about the encounter
             action = input("Choose an action: (1) Punch (2) Flee \n> ")  # Prompt the player to choose an action
             if action == "1":  # If the player chooses to punch
-                player_damage = random.randint(5, 15)  # Generate random damage value for the player attack
+                # Calculate damage using player's muscle 
+                player_damage = random.randint(5, 15) + self.player.muscle  # Include muscle points in damage calculation
                 enemy.take_damage(player_damage)  # Inflict damage on the enemy
                 print(f"You hit {enemy.name} for {player_damage} damage!")  # Notify the player of the damage dealt to the enemy
 
@@ -119,11 +123,11 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
         # Check if the player has been defeated during the fight
         if not self.player.is_alive():  
             self.game_over = True  # Set the game over flag to True
-            print("You were defeated by the mugger!")  # Notify the player that they lost the encounter
+            print("You were defeated!")  # Notify the player that they lost the encounter
 
     def encounter(self):  # Define a method to handle random encounters
         print("\nYou encounter something!")  # Inform the player that an encounter is about to occur
-        encounter_type = random.choice(["npc", "mugger", "prostitute"])  # Randomly choose an encounter type
+        encounter_type = random.choice(["npc", "mugger", "prostitute", "enemy"])  # Randomly choose an encounter type
 
         if encounter_type == "npc":  # If the encounter is with an NPC
             npc = NPC("Villager", health=50, money=10)  # Create an NPC instance
@@ -136,6 +140,11 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
         elif encounter_type == "prostitute":  # If the encounter is with a prostitute
             prostitute = Prostitute("Prostitute")  # Create a Prostitute instance
             self.interact_with_character(prostitute)  # Initiate interaction with the prostitute
+
+        elif encounter_type == "enemy":  # If the encounter is with an Enemy
+            enemy = Enemy()  # Create an Enemy instance
+            if not enemy.defeated:  # Only interact if this enemy hasn't been defeated
+                self.interact_with_character(enemy)  # Initiate interaction with the enemy 
 
     def play(self):  # Define the main game loop where gameplay occurs
         print("Welcome to the Text-Based GTA Game!")  # Print a welcome message for the player

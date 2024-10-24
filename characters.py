@@ -8,7 +8,7 @@ class Character:  # Define a base class for all characters within the game
         self.money = money  # Assign the amount of money the character possesses
 
     def is_alive(self):  # Method to check if the character is still alive
-        return self.health > 0  # Return True if the character's health is greater than 0, otherwise return False
+        return self.health > 0  # Return True if health is greater than 0, otherwise return False
 
     def take_damage(self, amount):  # Method to handle damage taken by the character
         self.health -= amount  # Reduce the character's health by the specified damage amount
@@ -20,7 +20,7 @@ class Character:  # Define a base class for all characters within the game
         return f"{self.name} | Health: {self.health} | Money: ${self.money}"  # Return a formatted string with character attributes
 
 
-class Player(Character):  # Define a Player class which inherits from the Character base class
+class Player(Character):  # Define a Player class that inherits from the Character base class
     def __init__(self, name):  # Initialize the player with a given name
         super().__init__(name, health=100, money=50)  # Call the parent class's initializer with default values for health and money
         self.muscle = 0  # Initialize muscle points for the player
@@ -38,7 +38,7 @@ class Player(Character):  # Define a Player class which inherits from the Charac
 
 
 class NPC(Character):  # Define a Non-Player Character (NPC) class that inherits from Character
-    def __init__(self, name, health, money):  # Initialize an NPC with a specific name, health, and money
+    def __init__(self, name, health=50, money=10):  # Initialize an NPC with a specific name, health, and money
         super().__init__(name, health, money)  # Call the parent class's initializer to set attributes
         self.dialogues = [  # Define a list of possible dialogues for the NPC
             "Hello there!",  # Dialogue options that can be randomly selected during interaction
@@ -50,6 +50,54 @@ class NPC(Character):  # Define a Non-Player Character (NPC) class that inherits
 
     def interact(self):  # Method for interacting with the NPC
         return random.choice(self.dialogues)  # Return a randomly selected dialogue from the NPC's list
+
+
+class Enemy(Character):  # Define an Enemy class that inherits from Character
+    ENEMY_NAMES = ["Carlos", "Davonta", "Ray-Ray", "Doog"]  # List of possible enemy names
+    MAX_HEALTH = 50  # Maximum health for enemies
+
+    def __init__(self):
+         # Randomly choose an enemy name
+        self.health = random.randint(30, 50)  # Randomly set enemy health between 30 and 50
+        self.encounter_count = 0  # Track the number of encounters with the player
+        self.defeated = False  # Track if the enemy is defeated
+
+    def interact(self):
+        # Enemy dialogue based on encounter count
+        dialogues = {
+            "Carlos": [
+                "You think you can take me on?",
+                "I won't go easy on you!",
+                "This is our final showdown!"
+            ],
+            "Davonta": [
+                "Ready to lose?",
+                "You think you're tough?",
+                "I've had enough of you!"
+            ],
+            "Ray-Ray": [
+                "No one beats me!",
+                "You’ll regret this!",
+                "You can’t escape!"
+            ],
+            "Doog": [
+                "You’ll pay for this!",
+                "I’m way stronger than you think!",
+                "You don’t stand a chance!"
+            ]
+        }
+        return dialogues[self.name][self.encounter_count % len(dialogues[self.name])]  # Select dialogue based on encounter count
+
+    def take_damage(self, amount):
+        self.health -= amount  # Decrease enemy's health by the damage amount
+        if self.health < 0:  # Prevent negative health
+            self.health = 0
+
+    def is_alive(self):
+        return self.health > 0  # Check if enemy is still alive
+
+    def loot(self):
+        return random.randint(5, 30)  # Define loot value when defeated
 
 
 class Mugger(Character):  # Define a Mugger class which inherits from Character
@@ -72,8 +120,26 @@ class Prostitute(Character):  # Define a Prostitute class that inherits from Cha
         return "What would you like to do? (1) Sex, (2) Rob, (3) Fight"  # Return a string indicating available actions
 
 
+
 '''
-# Example usage (this section can be removed or commented out in production):
+
+
+def get_locations():
+    # This function simulates fetching locations
+    # Replace these with your actual location objects
+    return [Location("Gym", "A place to enhance your strength."), Location("Park", "A peaceful area to relax.")]
+
+
+class Location:
+    def __init__(self, name, description):
+        self.name = name  # Location name
+        self.description = description  # Description of the location
+
+    def get_options(self):
+        return ["Work out", "Leave"]  # Sample options for locations
+
+
+        # Example usage (this section can be removed or commented out in production):
 if __name__ == "__main__":  # Check if this script is being executed as the main program
     player = Player("Hero")  # Create a new Player character named "Hero"
     npc = NPC("Villager", health=50, money=10)  # Create a new NPC character named "Villager" with specified attributes

@@ -43,11 +43,30 @@ class Game:  # Define a new class called Game
                 self.location = new_location  # Update the location based on the player's choice
                 print(f"You travel to {self.location.name}.")  # Inform the player of their new location
                 print(self.location.description)  # Print the description of the location
+
+                # If the player is at the Gym, present options to work out or leave
+                if self.location.name == "Gym":
+                    self.gym_options()
+
                 self.encounter()  # Trigger an encounter after traveling
             else:  # If the choice is invalid
                 print("Invalid choice!")  # Inform the player of the invalid choice
         except ValueError:  # Handle non-integer inputs
             print("Please enter a valid number or 'exit' to quit.")  # Notify the player of invalid input
+
+    def gym_options(self):
+        print("\nWhat would you like to do?")  # Ask for the user's choice in the Gym
+        for idx, option in enumerate(self.location.get_options()):  # Loop through options
+            print(f"{idx + 1}: {option}")  # Display each option
+
+        choice = input("> ")  # Get the player's choice
+        if choice == "1":
+            print("You decide to work out! Your strength increases.")  # Implement the logic for working out
+            self.player.muscle += 1  # Increase the player's muscle points
+            print(f"Muscle points increased to: {self.player.muscle}")
+        elif choice == "2":
+            print("You chose to leave the gym.")  # Implement the logic for leaving
+            self.location = None  # or set to a different location if you have one defined
 
     def interact_with_character(self, character):  # Method for interaction with any character
         if isinstance(character, Prostitute):  # Check if the character is a prostitute

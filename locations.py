@@ -12,9 +12,7 @@ class Location:  # Define a class named Location
 # Define a function to get all available locations
 def get_locations():  # Create a function named get_locations
     return [  # Return a list of Location objects
-        Location("City Center", "The bustling heart of the city, filled with shops and people."),  # Create a Location for City Center
-        Location("Park", "A peaceful park with trees and a pond."),  # Create a Location for Park
-        Location("Suburbs", "A quiet neighborhood with houses and families."),  # Create a Location for Suburbs
-        Location("Downtown", "The business district, busy with workers and traffic."),  # Create a Location for Downtown
-        Location("Beach", "A sandy beach with waves crashing on the shore."),  # Create a Location for Beach
+        Location("Gym", "Welcome to the gym."),  # Changed City Center to Gym
+        Location("Store", "Welcome to the store."),  # Changed Park to Store
+        Location("Home", "Welcome home."),  # Changed Suburbs to Home
     ]  # End of the list of locations

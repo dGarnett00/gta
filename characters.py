@@ -1,3 +1,4 @@
+# characters.py
 import random  # Import the random module to facilitate the generation of random values used throughout the game
 
 class Character:  # Define a base class for all characters within the game

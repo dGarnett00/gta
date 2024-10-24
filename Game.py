@@ -15,6 +15,7 @@ class Game:  # Define a new class called Game
     def display_status(self):  # Define a method to display the player's status
         print("\n--- Status ---")  # Print a header for the status display
         print(f"Current Location: {self.location.name if self.location else 'Escaped from prison'}")  # Print the current location
+        print(f"Name: {self.player.name}")  # Print the player's current health
         print(f"Health: {self.player.health}")  # Print the player's current health
         print(f"Money: ${self.player.money}")  # Print the player's current amount of money
         print(f"Muscle: {self.player.muscle}")  # Print the player's current muscle points

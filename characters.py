@@ -69,14 +69,6 @@ class Prostitute(Character):  # Define a Prostitute class that inherits from Cha
 
     def offer_services(self):  # Method for the prostitute's services
         return "What would you like to do? (1) Sex, (2) Rob, (3) Fight"
-    
-
-
-
-
-
-
-
 
 
 

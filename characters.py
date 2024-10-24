@@ -78,7 +78,7 @@ class Prostitute(Character):  # Define a Prostitute class that inherits from Cha
 
 
 
-    
+
 
 '''
 # Example usage (can be removed or commented out in production):

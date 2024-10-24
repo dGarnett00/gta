@@ -1,4 +1,4 @@
-import random  # Import the random module to use for generating random events
+import random  # Import the random module for generating random values
 from characters import Player, NPC, Mugger, Prostitute  # Import character classes
 from locations import get_locations  # Import the function to get locations
 
@@ -86,7 +86,12 @@ class Game:  # Define a new class called Game
 
         elif isinstance(character, NPC):  # Check if the character is an NPC
             print(f"\n{character.name}: {character.interact()}")  # Display NPC's dialogue
-            # Additional interactions can be added here if desired.
+
+            # 10% chance to reward the player with money
+            if random.random() < 0.1:  # 10% chance
+                reward = random.randint(10, 100)  # Random amount between $10 and $100
+                self.player.money += reward  # Add the reward to the player's money
+                print(f"{character.name} gave you ${reward}! What a nice surprise!")  # Notify the player of the reward
 
         elif isinstance(character, Mugger):  # Check if the character is a Mugger
             print(f"You encounter a mugger: {character.name}!")  # Notify the player about the mugger encounter

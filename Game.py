@@ -58,18 +58,21 @@ class Game:  # Define a class named Game that encapsulates the game's functional
             print("Please enter a valid number or 'exit' to quit.")  # Ask for valid input again
 
     def gym_options(self):  # Define a method for gym-specific activities
-        print("\nWhat would you like to do?")  # Prompt the user for their choice of action within the gym
-        for idx, option in enumerate(self.location.get_options()):  # Loop through available gym options for the player
-            print(f"{idx + 1}: {option}")  # Print each option along with its corresponding index
+        while True:  # Loop to allow continuous options in the gym
+            print("\nWhat would you like to do?")  # Prompt the user for their choice of action within the gym
+            for idx, option in enumerate(self.location.get_options()):  # Loop through available gym options for the player
+                print(f"{idx + 1}: {option}")  # Print each option along with its corresponding index
 
-        choice = input("> ")  # Get the player's choice of action in the gym
-        if choice == "1":  # If the player chooses to work out
-            print("You decide to work out! Your strength increases.")  # Notify the player of their choice
-            self.player.muscle += 1  # Increase the player's muscle points by 1
-            print(f"Muscle points increased to: {self.player.muscle}")  # Confirm the new muscle point total
-        elif choice == "2":  # If the player chooses to leave the gym
-            print("You chose to leave the gym.")  # Notify the player
-            self.location = None  # Reset the current location or can be set to a different location if defined
+            choice = input("> ")  # Get the player's choice of action in the gym
+            if choice == "1":  # If the player chooses to work out
+                print("You decide to work out! Your strength increases.")  # Notify the player of their choice
+                self.player.muscle += 1  # Increase the player's muscle points by 1
+                print(f"Muscle points increased to: {self.player.muscle}")  # Confirm the new muscle point total
+            elif choice == "2":  # If the player chooses to leave the gym
+                print("You chose to leave the gym.")  # Notify the player
+                break  # Exit the loop, returning to the travel options
+            else:  # In case of an invalid choice
+                print("Invalid choice! Please select a valid option.")  # Prompt the player to choose a valid action
 
     def interact_with_character(self, character):  # Define a method for player interaction with characters
         if isinstance(character, Prostitute):  # Check if the character is a Prostitute

@@ -34,7 +34,13 @@ class Game:  # Define a new class called Game
         try:
             choice = int(choice) - 1  # Convert the player's choice to an index
             if 0 <= choice < len(self.locations):  # Check if the player's choice is valid
-                self.location = self.locations[choice]  # Update the location based on the player's choice
+                new_location = self.locations[choice]  # Store the new location
+
+                if new_location == self.location:  # Check if the new location is the same as the current one
+                    print("You are already in this location! Choose a different one.")  # Notify the player
+                    return  # Do not proceed with traveling
+
+                self.location = new_location  # Update the location based on the player's choice
                 print(f"You travel to {self.location.name}.")  # Inform the player of their new location
                 print(self.location.description)  # Print the description of the location
                 self.encounter()  # Trigger an encounter after traveling

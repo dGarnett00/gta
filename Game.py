@@ -10,6 +10,11 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
         self.game_over = False  # Set a flag to indicate whether the game is over
         self.locations = get_locations()  # Retrieve a list of valid locations for the player to visit
 
+    def check_player_health(self):  # Method to check the player's health
+        if self.player.health <= 0:  # If health is zero or less
+            print("You have died!")  # Notify the player they have died
+            self.game_over = True  # Set the game_over flag to True to end the game
+
     def display_status(self):  # Define a method to display the current status of the player
         print("\n--- Status ---")  # Print a header for the status display
         print(f"Current Location: {self.location.name if self.location else 'Escaped from prison'}")  # Display current location
@@ -52,10 +57,14 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
                     self.gym_options()  # Gym-specific actions
                 elif self.location.name == "Home":
                     self.home_options()  # Home-specific actions
+
             else:  # If the chosen index is out of bounds
                 print("Invalid choice!")  # Notify the player of the invalid choice
+        
         except ValueError:  # Handle the case where the input cannot be converted to an integer
             print("Please enter a valid number or 'exit' to quit.")  # Ask for a valid input again
+
+        self.check_player_health()  # Check if the player has died after any potential damage
 
     def home_options(self):  # Define a method for options available at home
         while True:  # Loop for continuous options at home
@@ -83,6 +92,7 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
 
             # Display the player's status after each action
             self.display_status()  # Show updated status after an action
+            self.check_player_health()  # Check if the player has died after any potential damage
 
     def missions_options(self):  # Define available missions
         completed_missions = 0  # Track completed missions
@@ -144,6 +154,8 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
             else:
                 print("Invalid choice! Please select a valid option.")  # Ask for valid input
 
+            self.check_player_health()  # Check if the player has died after any potential damage
+
     def robbery_options(self):  # Define the robbery options
         while True:  # Loop to allow continuous robbery attempts
             print("\n--- Robbery Options ---")
@@ -158,6 +170,8 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
                 break  # Exit the robbery options loop
             else:  # If the choice is invalid
                 print("Invalid choice! Please select a valid option.")  # Ask for valid input
+
+            self.check_player_health()  # Check if the player has died after any potential damage
 
     def attempt_robbery(self):  # Define the robbery attempt logic
         outcomes = ["bank", "house", "store", "hotel", "gas station", "laundromat", "apartment", "friend", "family member"]
@@ -176,6 +190,7 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
             print(f"The robbery failed! You lost {health_loss} health.")  # Notify player of failure
 
         self.display_status()  # Show updated player status after the robbery attempt
+        self.check_player_health()  # Check if the player has died after any potential damage
 
     def fight_mutex(self, mugger):  # Define the fight with a mugger
         print(f"\n--- Fight with {mugger.name} ---")  # Introduce the fight
@@ -190,13 +205,15 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
                     mugger_damage = random.randint(5, 15)  # Determine damage dealt by the mugger
                     self.player.take_damage(mugger_damage)  # Apply damage to the player
                     print(f"{mugger.name} dealt {mugger_damage} damage to you.")  # Report damage received
+            
             elif action.lower() == "l":  # Player chooses to leave
                 print("You fled the fight.")  # Notify the player
                 break
             else:
                 print("Invalid action! Please choose 'a' to attack or 'l' to leave.")  # Invalid action
             
-            self.display_status()  # Display updated status after each action
+            self.display_status()  # Display updated status after each action  
+            self.check_player_health()  # Check if the player has died after any potential damage
 
         if not mugger.is_alive():  # Check if the mugger has been defeated
             loot = mugger.loot()  # Loot the defeated mugger
@@ -222,7 +239,7 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
             self.travel()  # Call the travel method to allow the player to choose a location to travel to
 
         print("Game Over! You couldn't survive.")  # Print a message indicating that the game has ended
-
+        
 if __name__ == "__main__":  # Check if the script is run directly (not imported as a module)
     game = Game()  # Create a new instance of the Game class
     game.play()  # Start the game by calling the play method that enters the main gameplay loop

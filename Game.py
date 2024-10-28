@@ -1,6 +1,3 @@
-# game.py
-
-
 import random  # Import the random module for generating random numbers used in game events
 from characters import Player, Mugger, Enemy  # Import Player, Mugger, and Enemy classes for their interactions
 from locations import get_locations  # Import a function to retrieve available locations in the game
@@ -199,7 +196,7 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
             else:
                 print("Invalid action! Please choose 'a' to attack or 'l' to leave.")  # Invalid action
             
-            self.display_status()  # Display updated status after each action  # Display the player's current status
+            self.display_status()  # Display updated status after each action
 
         if not mugger.is_alive():  # Check if the mugger has been defeated
             loot = mugger.loot()  # Loot the defeated mugger

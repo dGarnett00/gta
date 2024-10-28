@@ -46,19 +46,42 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
                 print(f"You travel to {self.location.name}.")  # Notify the player of the new location
                 print(self.location.description)  # Print the description of the newly arrived location
 
-                # If the player arrives at the Store, invoke store-specific options
+                # Invoke options specific to the location the player arrived at
                 if self.location.name == "Store":
                     self.store_options()  # Call the store options function for actions available in the store
+                elif self.location.name == "Gym":
+                    self.gym_options()  # Call the gym options for actions available in the gym
             else:  # If the chosen index is out of bounds
                 print("Invalid choice!")  # Notify the player of the invalid choice
         except ValueError:  # Handle the case where the input cannot be converted to an integer
             print("Please enter a valid number or 'exit' to quit.")  # Ask for a valid input again
 
+    def gym_options(self):  # Define a method for actions available in the gym
+        while True:  # Loop to allow continuous options in the gym
+            print("\n--- Gym Menu ---")
+            print("1: Work Out (Gain 10 Muscle) - Free")  # Option to work out and gain muscle
+            print("2: Leave Gym")  # Option to leave the gym
+
+            choice = input("> ")  # Get the player's choice of action in the gym
+            
+            if choice == "1":  # If the player chooses to work out
+                self.player.gain_muscle(10)  # Increase muscle points by 10
+                print(f"{self.player.name} worked out and gained 10 muscle points!")  # Notify player of their action
+            elif choice == "2":  # If the player chooses to leave the gym
+                print("You left the gym.")  # Notify the player
+                self.travel()  # Display travel options again
+                break  # Exit the gym loop
+            else:  # If the player's choice is invalid
+                print("Invalid choice! Please select a valid option.")  # Ask for valid input
+
+            # Display the player's status after each action
+            self.display_status()  # Show updated status after an action
+
     def store_options(self):  # Define a method for actions available in the store
         while True:  # Loop to allow continuous options in the store
             print("\n--- Store Menu ---")
-            print("1: Buy Health (Cost: $10, Gain: 10 Health)")
-            print("2: Buy Steroids (Cost: $30, Gain: 20 Muscle)")
+            print("1: Buy Health (Cost: $10, Gain: 10 Health)")  # Option to buy health
+            print("2: Buy Steroids (Cost: $30, Gain: 20 Muscle)")  # Option to buy steroids
             print("3: Leave Store")  # Option to leave the store
 
             choice = input("> ")  # Get the player's choice of action in the store
@@ -67,7 +90,7 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
                 if self.player.money >= 10:  # Check if the player has enough money
                     self.player.money -= 10  # Deduct cost from player's money
                     self.player.health += 10  # Increase player's health by 10
-                    print("You bought health! Your health has increased by 10.")
+                    print("You bought health! Your health has increased by 10!")
                 else:
                     print("Not enough money to buy health!")  # Notify player they don't have enough money
 
@@ -75,7 +98,7 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
                 if self.player.money >= 30:  # Check if the player has enough money
                     self.player.money -= 30  # Deduct cost from player's money
                     self.player.gain_muscle(20)  # Increase muscle points by 20
-                    print("You bought steroids! Your muscle has increased by 20.")
+                    print("You bought steroids! Your muscle has increased by 20!")
                 else:
                     print("Not enough money to buy steroids!")  # Notify player they don't have enough money
 
@@ -83,8 +106,12 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
                 print("You left the store.")  # Notify the player
                 self.travel()  # Display travel options again
                 break  # Exit the store loop
+            
             else:  # If the player's choice is invalid
                 print("Invalid choice! Please select a valid option.")  # Ask for valid input
+
+            # Display the player's status after each transaction
+            self.display_status()  # Show updated status after a transaction
 
     def play(self):  # Define the main game loop where gameplay occurs
         print("Welcome to the Text-Based GTA Game!")  # Print a welcome message for the player

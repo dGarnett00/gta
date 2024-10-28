@@ -1,5 +1,4 @@
 # locations.py file
-
 class Location:  # Define a class named Location to represent different places in the game
     def __init__(self, name, description, options):  # Constructor to initialize the attributes of a Location
         self.name = name  # Assign the name of the location (e.g., "Gym", "Store", "Home")
@@ -11,7 +10,6 @@ class Location:  # Define a class named Location to represent different places i
 
     def get_options(self):  # Define a method to retrieve the available options for the location
         return self.options  # Return the list of options available to the player at this location
-
 
 # Define a function to retrieve all available locations in the game
 def get_locations():  # Create a function named get_locations to gather all location objects

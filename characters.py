@@ -57,7 +57,7 @@ class Enemy(Character):  # Define an Enemy class that inherits from Character
     MAX_HEALTH = 50  # Maximum health for enemies
 
     def __init__(self):
-         # Randomly choose an enemy name
+        self.name = random.choice(self.ENEMY_NAMES)  # Randomly choose an enemy name
         self.health = random.randint(30, 50)  # Randomly set enemy health between 30 and 50
         self.encounter_count = 0  # Track the number of encounters with the player
         self.defeated = False  # Track if the enemy is defeated
@@ -118,10 +118,13 @@ class Prostitute(Character):  # Define a Prostitute class that inherits from Cha
 
     def offer_services(self):  # Method for the prostitute to offer services
         return "What would you like to do? (1) Sex, (2) Rob, (3) Fight"  # Return a string indicating available actions
+    
 
 
 
-'''
+
+
+    '''
 
 
 def get_locations():

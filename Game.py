@@ -46,29 +46,43 @@ class Game:  # Define the Game class to encapsulate the game's logic and functio
                 print(f"You travel to {self.location.name}.")  # Notify the player of the new location
                 print(self.location.description)  # Print the description of the newly arrived location
 
-                # If the player arrives at the Gym, invoke gym-specific options
-                if self.location.name == "Gym":
-                    self.gym_options()  # Call the gym options function for actions available in the gym
+                # If the player arrives at the Store, invoke store-specific options
+                if self.location.name == "Store":
+                    self.store_options()  # Call the store options function for actions available in the store
             else:  # If the chosen index is out of bounds
                 print("Invalid choice!")  # Notify the player of the invalid choice
         except ValueError:  # Handle the case where the input cannot be converted to an integer
             print("Please enter a valid number or 'exit' to quit.")  # Ask for a valid input again
 
-    def gym_options(self):  # Define a method for actions available in the gym
-        while True:  # Loop to allow continuous options in the gym
-            print("\nWhat would you like to do?")  # Prompt the user for their choice of action within the gym
-            
-            for idx, option in enumerate(self.location.get_options()):  # Loop through available gym options for the player
-                print(f"{idx + 1}: {option}")  # Print each option along with its index
+    def store_options(self):  # Define a method for actions available in the store
+        while True:  # Loop to allow continuous options in the store
+            print("\n--- Store Menu ---")
+            print("1: Buy Health (Cost: $10, Gain: 10 Health)")
+            print("2: Buy Steroids (Cost: $30, Gain: 20 Muscle)")
+            print("3: Leave Store")  # Option to leave the store
 
-            choice = input("> ")  # Get the player's choice of action in the gym
+            choice = input("> ")  # Get the player's choice of action in the store
             
-            if choice == "1":  # If the player chooses to work out
-                print("You decide to work out! Your muscle increases.")  # Notify the player of their workout decision
-                self.player.gain_muscle(1)  # Increase the player's muscle points by 1 using the newly defined method
-            elif choice == "2":  # If the player chooses to leave the gym
-                print("You chose to leave the gym.")  # Notify the player
-                break  # Exit the loop, returning to the travel options
+            if choice == "1":  # If the player chooses to buy health
+                if self.player.money >= 10:  # Check if the player has enough money
+                    self.player.money -= 10  # Deduct cost from player's money
+                    self.player.health += 10  # Increase player's health by 10
+                    print("You bought health! Your health has increased by 10.")
+                else:
+                    print("Not enough money to buy health!")  # Notify player they don't have enough money
+
+            elif choice == "2":  # If the player chooses to buy steroids
+                if self.player.money >= 30:  # Check if the player has enough money
+                    self.player.money -= 30  # Deduct cost from player's money
+                    self.player.gain_muscle(20)  # Increase muscle points by 20
+                    print("You bought steroids! Your muscle has increased by 20.")
+                else:
+                    print("Not enough money to buy steroids!")  # Notify player they don't have enough money
+
+            elif choice == "3":  # If the player chooses to leave the store
+                print("You left the store.")  # Notify the player
+                self.travel()  # Display travel options again
+                break  # Exit the store loop
             else:  # If the player's choice is invalid
                 print("Invalid choice! Please select a valid option.")  # Ask for valid input
 

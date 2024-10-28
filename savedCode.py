@@ -49,3 +49,33 @@ if __name__ == "__main__":
     print(npc)  # Print the NPC's status
     print(npc.interact())  # Display the NPC's interaction
     '''
+
+
+'''
+def get_locations():
+    # This function simulates fetching locations
+    # Replace these with your actual location objects
+    return [Location("Gym", "A place to enhance your strength."), Location("Park", "A peaceful area to relax.")]
+
+
+class Location:
+    def __init__(self, name, description):
+        self.name = name  # Location name
+        self.description = description  # Description of the location
+
+    def get_options(self):
+        return ["Work out", "Leave"]  # Sample options for locations
+
+
+        # Example usage (this section can be removed or commented out in production):
+if __name__ == "__main__":  # Check if this script is being executed as the main program
+    player = Player("Hero")  # Create a new Player character named "Hero"
+    npc = NPC("Villager", health=50, money=10)  # Create a new NPC character named "Villager" with specified attributes
+    mugger = Mugger("Thug")  # Create a new mugger character with a random name
+    prostitute = Prostitute("Lola")  # Create a new prostitute named "Lola"
+
+    print(player)  # Print the player's status
+    print(npc)  # Print the NPC's status
+    print(mugger)  # Print the mugger's status
+    print(prostitute)  # Print the prostitute's status
+'''

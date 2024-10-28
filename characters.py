@@ -1,4 +1,3 @@
-# characters.py file
 import random  # Import the random module to facilitate the generation of random values used throughout the game
 
 class Character:  # Define a base class for all characters within the game
@@ -123,10 +122,8 @@ class Prostitute(Character):  # Define a Prostitute class that inherits from Cha
 
 
 
-
-    '''
-
-
+    
+'''
 def get_locations():
     # This function simulates fetching locations
     # Replace these with your actual location objects
